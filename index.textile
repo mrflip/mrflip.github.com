@@ -1,0 +1,6 @@
+
+I started infochimps.org. I'm building tools to organize, explore and comprehend massive information streams.
+
+* "Wukong":http://github.com/mrflip/wukong -- Hadoop made easy.
+* "Monkeyshines": http://github.com/mrflip/wuclan -- A powerful, flexible API scraper.
+* "Wuclan":http://github.com/mrflip/wuclan -- Scraping the social web
