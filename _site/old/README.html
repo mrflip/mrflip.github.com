@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+   <title>mrflip.github.com/edamame - MIT License</title>
+   <meta name="author"      content="mrflip" />
+   <meta name="viewport"    content="width=940" />
+   <meta name="keywords"    content=",edamame,beanstalk,beanstalkd,ruby,mrflip,infochimps,persistent,database,queue,queuing,system,sqs,rabbitmq,rails,job,distributed,tokyo,tyrant,cabinet,ruby,gem"/>
+   <meta name="description" content="Beanstalk + Tokyo Tyrant = Edamame, a fast persistent distributed priority job queue implemented in Ruby."/>
+   <!-- <link rel="alternate" type="application/atom+xml" href="http://feeds.feedburner.com/mrflip-github-com-edamame" title="mrflip/edamame" /> -->
+   <link rel="alternate" type="application/atom+xml" href="/atom.xml" title="mrflip/edamame" />
+   <link rel="shortcut icon"              href="/favicon.ico" />
+   <!--[if IE]>
+   <link rel="stylesheet" type="text/css" href="/css/ie.css"     media="screen, projection" />
+   <![endif]-->
+   <link rel="stylesheet" type="text/css" href="/css/print.css"  media="print" />
+   <link rel="stylesheet" type="text/css" href="/css/main.css"   media="screen, projection" />
+   <link rel="stylesheet" type="text/css" href="/css/syntax.css" />
+</head>
+<body>
+
+<div id="container">
+  <div id="header">
+    <a href="/">mrflip/edamame</a>
+    &middot; <a class="extra" href="http://github.com/mrflip/edamame">source code</a>
+    
+    &middot; <a class="extra" href="/INSTALL.html">install</a>
+    
+    &middot; <a class="extra" href="/LICENSE.html">license</a>
+    
+    &middot; <a class="extra" href="/usage.html">usage</a>
+    
+    &middot; <a class="extra" href="/alternatives.html">alternatives</a>
+    
+  </div>
+
+  <div class="download"><a href="http://github.com/mrflip/edamame/zipball/master"><img border="0" width="72" src="/images/zip.png"></a><a href="http://github.com/mrflip/edamame/tarball/master"><img border="0" width="72" src="/images/tar.png"></a><a href="http://gems.github.com/gems/mrflip-edamame-0.1.0.gem"><img border="0" width="72" src="/images/gem.png"></a></div>
+  <h1 class="gemheader">edamame: usage</h1>
+<h2>Beanstalk + Tokyo Tyrant = Edamame, a fast persistent distributed priority job queue</h2>
+<p><a href="http://bit.ly/edamame">Edamame</a> combines the <a href="http://bit.ly/beanstalkd">Beanstalk priority queue</a> with a <a href=":http://bit.ly/ttyrant">Tokyo Tyrant database</a> and <a href="http://bit.ly/godmonitor">God monitoring</a> to produce a persistent distributed priority job queue system.</p>
+<ul>
+	<li>fast, scalable, lightweight and distributed</li>
+	<li>persistent and recoverable</li>
+	<li>scalable up to your memory limits</li>
+	<li>queryable and enumerable jobs</li>
+	<li>named jobs</li>
+	<li>reasonably-good availability.</li>
+</ul>
+<p>Like beanstalk, it is a job queue, not just a message queue:</p>
+<ul>
+	<li>priority job scheduling, not just <span class="caps"><span class="caps">FIFO</span></span></li>
+	<li>Supports multiple queues (&#8216;tubes&#8217;)</li>
+	<li>reliable scheduling: jobs that time out are re-assigned</li>
+</ul>
+<p>It includes a few nifty toys:</p>
+<ul>
+	<li>Scripts for <a href="http://bit.ly/godmonitor">God</a> to monitor and restart the daemons</li>
+	<li>Command-line management scripts to load. enumerate, empty, and show stats for the db+queue</li>
+	<li>The start of a lightweight web frontend in Sinatra.</li>
+</ul>
+<p>Hi,</p>
+<p>I&#8217;ve slapped together the beanstalk distributed priority queue (http://bit.ly/beanstalkd) and the Tokyo Tyrant lightweight database (http://bit.ly/ttyrant &#8211; http://bit.ly/ttyrantruby) to create a serviceable persistent distributed priority queue.</p>
+<p>If you&#8217;re willing to accept its weaknesses, it gives you</p>
+<ul>
+	<li>persistence</li>
+	<li>queryability and enumeration of jobs</li>
+	<li>named jobs</li>
+</ul>
+<h3>Design</h3>
+<p>Jobs are persisted to a tokyo tyrant backing store. Beanstalkd</p>
+<p>(No failover or discovery, but yes restarting and reloading.)<br />
+<h3>Caveats</h3><br />
+<p>Weaknesses? Mainly that it will make an Erlang&#8217;er cry for its lack of concurrency correctness. Its goal is to work pretty well and to recover gracefully, but its design limits .</p><br />
+<ul><br />
+	<li>We store jobs in two places: the central DB and the distributed queue.</li></p>
+</ul>
+<ul>
+	<li>As always, your jobs must either be idempotent, or harmless if re-run: a job could start and do some or all of its job &#8212; but lose contact with the queue, causing the job to be re-run. This is inherent in beanstalkd (and most comparable solutions), not just edamame.</li>
+</ul>
+<ul>
+	<li>Although God</li>
+</ul>
+<h3>TODOs</h3>
+<ul>
+	<li>Restarting is still manual: you have to run bin/sync.rb to reload the queue from the database</li>
+	<li>Right now each jobs lives in full in the beanstalkd. This carries a heavy memory cost but a performance gain (the alternative is to do a second query to the DB once the job has been retrieved). I&#8217;m going to make both implementations available.</li>
+	<li>The sinatra queue viewer doesn&#8217;t work at the moment.</li>
+</ul>
+<h2>Requirements and Installation</h2>
+<p>For the beanstalk part, You&#8217;ll need libevent &gt;= 1.4, beanstalkd &gt;= 1.3, and beanstalk-client</p>
+<pre>
+    cd /usr/local/src/ ;
+    pkg=libevent-1.4.11-stable ;( wget -nc http://monkey.org/~provos/${pkg}.tar.gz     &amp;amp;&amp;amp; tar xvzf ${pkg}.tar.gz &amp;amp;&amp;amp; cd $pkg &amp;amp;&amp;amp; ./configure --prefix=/usr/local                         &amp;amp;&amp;amp; make -j2 &amp;amp;&amp;amp; sudo make install ) ;
+    pkg=beanstalkd-1.3         ;( wget -nc http://xph.us/dist/beanstalkd/${pkg}.tar.gz &amp;amp;&amp;amp; tar xvzf ${pkg}.tar.gz &amp;amp;&amp;amp; cd $pkg &amp;amp;&amp;amp; ./configure --prefix=/usr/local --with-event=/usr/local &amp;amp;&amp;amp; make -j2 &amp;amp;&amp;amp; sudo make install ) ;
+    sudo gem install --no-ri --no-rdoc dustin-beanstalk-client ;
+</pre>
+<p>For the tokyotyrant part, you&#8217;ll need tokyocabinet, tokyotyrant and their corresponding ruby libraries:</p>
+<pre>
+    cd /usr/local/src/ ;
+    ttbase=http://downloads.sourceforge.net/sourceforge/tokyocabinet
+    pkg=tokyocabinet-1.4.29    ;( wget -nc ${ttbase}/${pkg}.tar.gz &amp;amp;&amp;amp; tar xvzf ${pkg}.tar.gz &amp;amp;&amp;amp; cd $pkg &amp;amp;&amp;amp; ./configure --prefix=/usr/local &amp;amp;&amp;amp; make -j2 &amp;amp;&amp;amp; sudo make install ) ;
+    pkg=tokyotyrant-1.1.30     ;( wget -nc ${ttbase}/${pkg}.tar.gz &amp;amp;&amp;amp; tar xvzf ${pkg}.tar.gz &amp;amp;&amp;amp; cd $pkg &amp;amp;&amp;amp; ./configure --prefix=/usr/local &amp;amp;&amp;amp; make -j2 &amp;amp;&amp;amp; sudo make install ) ;
+    pkg=tokyocabinet-ruby-1.27 ;( wget -nc ${ttbase}/${pkg}.tar.gz &amp;amp;&amp;amp; tar xvzf ${pkg}.tar.gz &amp;amp;&amp;amp; cd $pkg &amp;amp;&amp;amp; ruby extconf.rb                 &amp;amp;&amp;amp; make -j2 &amp;amp;&amp;amp; sudo make install ) ;
+    pkg=tokyotyrant-ruby-1.10  ;( wget -nc ${ttbase}/${pkg}.tar.gz &amp;amp;&amp;amp; tar xvzf ${pkg}.tar.gz &amp;amp;&amp;amp; cd $pkg &amp;amp;&amp;amp; sudo ruby install.rb ) ;
+</pre>
+<h2>Why you should, or shouldn&#8217;t, use Edamame</h2>
+<p><b>Beanstalkd</b>&#8217;s strengths:</p>
+<ul>
+	<li>fast</li>
+	<li>loosely-ordered <b>priority queuing</b> (few others have this)</li>
+	<li>multiple queues (via &#8216;tubes&#8217;)</li>
+	<li>reliable: jobs that time out are re-assigned</li>
+	<li>lightweight</li>
+	<li>distributed</li>
+	<li>scalable up to your memory limits</li>
+	<li>simple implementation</li>
+	<li>simple wire protocol and thus tons of language libraries</li>
+</ul>
+<p>It lacks</p>
+<ul>
+	<li>persistence</li>
+	<li>security (via, e.g., signed jobs)</li>
+	<li>failover / high availability</li>
+	<li>discovery of new instances</li>
+</ul>
+<p><b>Edamame</b> adds persistence and (with the God scripts) &#8216;good-enough availability&#8217; (note that it still lacks discovery). It also introduces a bit of complexity and some risk of inconsistent state or duplicated jobs (see above).</p>
+<h4>Other distributed queues</h4>
+<p>RabbitMQ, Kestrel and Amazon&#8217;s <span class="caps"><span class="caps">SQS</span></span> seem to be the best industrial-strength distributed queue systems. Note that they are messaging queues and lack some of the specifically job queuing features of Beanstalk.</p>
+<ul>
+	<li><a href="http://www.rabbitmq.com/">RabbitMQ</a><br />
+	<ul><br />
+		<li>fast</li>
+		<li><span class="caps"><span class="caps">FIFO</span></span> message queue: poor job support</li>
+		<li>?? NO multiple queues</li>
+		<li>?? NO reliable: jobs that time out are re-assigned</li>
+		<li>lightweight</li>
+		<li>distributed</li>
+		<li>scalable up to your memory limits</li>
+		<li>Uses the industrial strength <span class="caps"><span class="caps">AMPQ</span></span> protocol</li>
+		<li>HA, failover, discovery</li>
+		<li>Strong support for Python and  .  Libraries with weak documentation exist in most other languages.</li>
+<p></ul></li></p>
+</ul>
+<ul>
+	<li><a href="http://github.com/robey/kestrel/tree/master">Kestrel,</a> a reimplementation of Starling<br />
+	<ul><br />
+		<li>fast</li>
+		<li>Scheduling is loosely-ordered <span class="caps"><span class="caps">FIFO</span></span> (no priority)</li>
+		<li>multiple queues (via &#8216;tubes&#8217;).</li>
+		<li>reliable: jobs that time out are re-assigned</li>
+		<li>lightweight</li>
+		<li>distributed</li>
+		<li>scalable up to your memory limits</li>
+		<li>persistent <strong>and</strong> journaled</li>
+		<li>Written in Scala (Java). Uses memcached protocol: more or less perfectly cross-platform.</li>
+		<li>Documentation is sparse, though Starling&#8217;s and Memcached&#8217;s have most of what you need.</li>
+		<li>Note that Starling lacks many of these features; Kestrel makes a better job queue and should be a functional replacement</li>
+		<li>see: <a href="http://github.com/robey/kestrel">Kestrel on github</a> &#8211; <a href="http://robey.lag.net/2008/11/27/scarling-to-kestrel.html">Kestrel announcement</a></li>
+<p></ul></li></p>
+</ul>
+<ul>
+	<li><a href="http://aws.amazon.com/sqs/">Amazon <span class="caps"><span class="caps">SQS</span></span></a><br />
+	<ul><br />
+		<li>Not as fast</li>
+		<li>Costs money &#8212; equeuing and dequeuing 1M requests costs $2.00 for reqs; if your server is not on <span class="caps"><span class="caps">AWS</span></span> then you&#8217;ll pay data charges, an additional ($0.27 per kB per million jobs).</li>
+<p></ul></li></p>
+</ul>
+<p>This <a href="http://wiki.secondlife.com/wiki/Message_Queue_Evaluation_Notes">comparison of message queues</a> describes one group&#8217;s opinionated survey of the industrial strenght distributed messaging queue ecosystem. Note carefully their criteria; ours were quite different, hence edamame.</p>
+<h4>Other worker queues</h4>
+<p>Most of these are heavy-weight job queuing solutions that play nice with Rails:</p>
+<ul>
+	<li><a href="http://codeforpeople.rubyforge.org/svn/bj/trunk/README">BackgroundJob</a></li>
+	<li><a href="http://backgroundrb.rubyforge.org/">BackgroundRB</a></li>
+	<li><a href="http://github.com/tobi/delayed_job/">Delayed Job</a></li>
+	<li><a href="http://github.com/purzelrakete/workling/">Workling</a> (<a href="http://railscasts.com/episodes/128-starling-and-workling">Starling and Workling</a>)</li>
+	<li><a href="http://github/tra/spawn">Spawn</a></li>
+</ul>
+<p>This talk by Rob Mack on <a href="http://blog.robmack.com/2009/05/04/background_processing/">Background Processing in Ruby on Rails</a> (at the April <a href="http://austinonrails.org/">Austin on Rails</a> meeting) has a great overview of job queuing solutions for Rails and in general.</p>
+<h2>Note on Patches/Pull Requests</h2>
+<ul>
+	<li>Fork the project.</li>
+	<li>Make your feature addition or bug fix.</li>
+	<li>Add tests for it. This is important so I don&#8217;t break it in a<br />
+  future version unintentionally.</li>
+	<li>Commit, do not mess with rakefile, version, or history.<br />
+  (if you want to have your own version, that is fine but<br />
+   bump version in a commit by itself I can ignore when I pull)</li>
+	<li>Send me a pull request. Bonus points for topic branches.</li>
+</ul>
+<h2>Endnotes</h2>
+<ul>
+	<li>Origin of the name <a href="http://en.wikipedia.org/wiki/Edamame">edamame</a></li>
+	<li>This library was written to support the <a href="http://bit.ly/shines">Monkeyshines</a> distributed <span class="caps"><span class="caps">API</span></span> scraper.</li>
+	<li>Beanstalk:<br />
+	<ul><br />
+		<li><a href="http://xph.us/software/beanstalkd/">Beanstalk, a fast, distributed, in-memory workqueue service</a></li>
+		<li><a href="http://github.com/kr/beanstalkd/tree/master">Beanstalkd code</a></li>
+		<li><a href="http://wiki.github.com/kr/beanstalkd/faq"><span class="caps"><span class="caps">FAQ</span></span></a></li>
+		<li><a href="http://github.com/dustin/beanstalk-client-ruby/tree/master">Beanstalk Ruby Client</a></li>
+		<li><a href="http://nubyonrails.com/articles/about-this-blog-beanstalk-messaging-queue">Tutorial from nubyonrails</a></li>
+		<li><a href="http://www.mail-archive.com/beanstalk-talk@googlegroups.com/">Mailing list</a></li>
+		<li>Some <a href="http://github.com/dustin/beanstalk-tools/tree/master">beanstalk utilities</a> &#8212; edamame has its own take on some of these.</li>
+<p></ul></li><br />
+	<li>Tokyo Tyrant:<br />
+	<ul><br />
+		<li><a href="http://tokyocabinet.sourceforge.net/tyrantdoc/">Tokyo Tyrant</a></li><br />
+		<li><a href="http://tokyocabinet.sourceforge.net/tyrantrubydoc/">Tokyo Tyrant Ruby libs</a></li><br />
+		<li>You&#8217;ll need the <a href="http://tokyocabinet.sourceforge.net">Tokyo Cabinet</a> libs and the <a href="http://tokyocabinet.sourceforge.net/tyrantdoc/">Tokyo Cabinet Ruby libs</a></li></p>
+<p></ul></li><br />
+	<li><a href="http://god.rubyforge.org/">God process monitoring framework</a><br />
+	<ul><br />
+		<li>http://railscasts.com/episodes/130-monitoring-with-god</li><br />
+		<li>Some code for the god conf is inspired by that railscast, <a href="http://pastie.textmate.org/private/ovgxu2ihoicli2ktrwtbew">this pastie,</a> the <a href="http://god.rubyforge.org/">one from the god docs</a>, and <a href="http://millarian.com/programming/ruby-on-rails/monitoring-thin-using-god-with-google-apps-notifications/">Configuring GMail notifiers in God</a></li></p>
+<p></ul></li></p>
+</ul>
+<ul>
+		<li>Alternatives to God include (in order of complexity): <a href="http://mmonit.com/monit/">Monit,</a> perhaps <a href="http://www.howtoforge.com/server_monitoring_monit_munin">with Munin;</a> <a href="http://www.cacti.net/">Cacti</a> and <a href="http://www.hyperic.com/">Hyperic</a></li>
+<p></ul><li></p>
+
+  <br class="clear">
+      
+  <div id="footer">
+    <div class="contact list aligned">
+      <p>
+      <a href="http://infochimps.org/"   >infochimps.org</a>            | find, share or sell any dataset in the world<br />
+      <a href="http://github.com/mrflip/">github/mrflip</a>         | mrflip's code on github.com <br />
+      </p>
+    </div>
+    <div class="contact list aligned">
+      <p>
+      <a href="http://github.com/mrflip/wukong"       >wukong</a>       | hadoop made easy          <br />
+      <a href="http://github.com/mrflip/edamame"      >edamame</a>      | fast persistent job queue <br />
+      <a href="http://github.com/mrflip/monkeyshines" >monkeyshines</a> | api scraper               <br />
+      <a href="http://github.com/mrflip/wuclan"       >wuclan</a>       | social media scraper
+      </p>
+    </div>
+    <div class="rss">
+      <!-- http://feeds.feedburner.com/mrflip-github-com-edamame -->
+      <a href="/atom.xml"><img src="/images/rss.png" alt="Subscribe to RSS Feed" /></a> 
+    </div>
+    <p class="clear">Thanks to <a href="http://github.com/mojombo/">github.com/mojombo</a> for the swanky HTML layout.</p>
+  </div>
+</div>
+
+<a href="http://github.com/mrflip/edamame"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/images/forkme_right_red_aa0000.png" alt="Fork me on GitHub" /></a>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"      type="text/javascript" ></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/jquery-ui.min.js" type="text/javascript" ></script>
+<script src="/javascripts/application.js"                                          type="text/javascript" ></script>
+
+
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-3828631-3");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+</html>
