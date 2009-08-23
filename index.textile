@@ -1,9 +1,8 @@
 ---
 layout: default
-title:  mrflip.github.com/edamame
+title:  mrflip.github.com
 collapse: false
 ---
-{% include gemheader.html %}
 
 h1(gemheader). mrflip
 

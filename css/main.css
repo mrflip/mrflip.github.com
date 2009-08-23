@@ -44,7 +44,7 @@ h1              { font-size: 175%;        text-align: center }
 h2              { font-size: 150%;        }
 h3              { font-size: 115%;        }
 h4, h5, h6      { font-size: 100%;        }
-h1 .small       { font-size: 75%;         }
+.small       { font-size: 75%;         }
 h1 a,h2 a,h3 a  { text-decoration: none;  }
 
 h2 { border: 1px solid #aaa ; border-width: 0 0 1px 0 ; margin: 1.5em 0 1.0em -10px ; padding: 0 0 0.25em 10px ; text-align: left }

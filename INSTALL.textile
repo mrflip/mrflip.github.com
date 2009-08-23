@@ -2,7 +2,6 @@
 layout: default
 title:  Install Notes
 ---
-{% include gemheader.html %}
 
 h1(gemheader). edamame %(small):: install%
 
