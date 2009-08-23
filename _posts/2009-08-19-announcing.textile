@@ -1,9 +1,0 @@
----
-layout: post
-title: Announcing Edamame!
----
-
-h2. announced.
-
-Yay!
-

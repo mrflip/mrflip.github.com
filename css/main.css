@@ -180,10 +180,11 @@ ul.posts span {
 #header a.extra:hover { color: black; }
 
 #footer {
-  font-size: 80%;
-  border-top: 4px solid #eee;
-  margin-top: 2em;
-  overflow: hidden;
+  font-size:    80%;
+  border-top:   4px solid #eee;
+  margin-top:   2em;
+  overflow:     hidden;
+  padding:      0 1em;
 }
 #footer .contact a { color: #666;    }
 #footer .contact a { color: #8085C1; }
