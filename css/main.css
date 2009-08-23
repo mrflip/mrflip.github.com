@@ -173,7 +173,7 @@ ul.posts span {
 
 #header               { margin: 1.5em 0 2em 0; clear: both ; }
 #header a             { margin-left:  0.5em; margin-right: 0.5em; }
-#header               { color: #a00;  font-weight: bold;     font-size: 115% ; }
+#header               { font-weight: bold;     font-size: 115% ; }
 #header a             { color: #a00;  text-decoration: none; }
 #header a:hover       { color: black; }
 #header a.extra       { color: #aaa;  text-decoration: none;}
