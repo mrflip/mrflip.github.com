@@ -1,0 +1,12 @@
+---
+layout: post
+title: Stupid Liquid / Jekyll Tricks
+---
+
+So I've just gotten going with Jekyll and Liquid setting up "github pages":http://pages.github.com/ for "all my gems.":http://github.com/mrflip
+
+In the course of this I wanted Liquid to loop over an array, but exclude the whole block if the array is empty.  Maybe there's a good way to do this, but here's what I did:
+
+<script src="http://gist.github.com/173448.js"></script>  
+
+Basically, @has_posts@ will only be set if there's something in the array.

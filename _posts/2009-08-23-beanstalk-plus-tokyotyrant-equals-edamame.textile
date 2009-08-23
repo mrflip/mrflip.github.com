@@ -1,0 +1,10 @@
+---
+layout: post
+title: Beanstalk plus Tokyo Tyrant makes Edamame, a fast persistent distributed priority queue.
+---
+
+I'm releasing a preliminary version of Edamame, a fast persistent distributed priority queue we've written for "Monkeyshines":http://github.com/mrflip/monkeyshines
+
+* "Announcement":http://blog.infochimps.org/2009/08/22/beanstalk-tokyotyrant-edamame-persistent-queue/
+* "Get it here":http://github.com/mrflip/monkeyshines
+* "Documentation":http://mrflip.github.com/edamame

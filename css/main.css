@@ -104,10 +104,10 @@ pre.terminal code {                                       background-color: #333
 h2 { line-height:          22px; }
   
 .toggle h2      {
-  margin-left:         0px;
+  margin-left:          0px;
   padding-left:         30px;
   line-height:          22px;
-  background: url('/images/comments.png') no-repeat 0px -30px ;
+  background: url('/images/comments.png') no-repeat 0px -178px ;
 }
 .toggle .closed { background-position: 0px 0px ; }
 
@@ -120,6 +120,10 @@ h2 { line-height:          22px; }
   padding: 0 ;
   margin:  0 0 0 10px; 
 }
+
+#news {
+  margin-bottom: 6em;
+  }
 
 /*****************************************************************************/
 /*
