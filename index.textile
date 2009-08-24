@@ -7,11 +7,14 @@ collapse: false
 h1(gemheader). mrflip
 
 
-p(description). I founded the <a href="http://infochimps.org">infochimps.org</a> project. This is the home for my open source gems.
+p(description). Here are some of my open source projects:
 
 * "edamame,":edamame/ a fast persistent job queue
 * "wukong,":wukong/   Hadoopo made so easy a chimpanzee can use it.
 * "monkeyshines,":monkeyshines/ a fast, flexible distributed guided scraper
 * "wuclan,":wuclan/ monkeyshines recipes for social media sites
+
+
+p(description). I also founded the <a href="http://infochimps.org">infochimps.org</a> project -- a website to find, share or sell any dataset in the world.  If you need to get or got data, stop on by.
 
 {% include news.html %}
