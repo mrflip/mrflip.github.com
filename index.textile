@@ -4,7 +4,7 @@ title:  mrflip.github.com
 collapse: false
 ---
 
-h1(gemheader). mrflip
+h1(gemheader). mrflip %(small):: data farmer%
 
 
 p(description). Here are some of my open source projects:
@@ -15,6 +15,6 @@ p(description). Here are some of my open source projects:
 * "wuclan,":wuclan/ monkeyshines recipes for social media sites
 
 
-p(description). I also founded the <a href="http://infochimps.org">infochimps.org</a> project -- a website to find, share or sell any dataset in the world.  If you need to get or got data, stop on by.
+p. I also founded the <a href="http://infochimps.org">infochimps.org</a> project -- a website to find, share or sell any dataset in the world.  If you need to get or got data, stop on by.
 
 {% include news.html %}
