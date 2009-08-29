@@ -1,0 +1,114 @@
+---
+layout: post
+title: Installing Nokogiri on OSX with an libxml2 it doesn't hate
+---
+
+Are you getting a "pissy message":http://github.com/tenderlove/nokogiri/issues/closed/#issue/69 from nokogiri saying "@I_KNOW_I_AM_USING_AN_OLD_AND_BUGGY_VERSION_OF_LIBXML2@"? If you think you've fixed it, do you then start getting @WARNING: Nokogiri was built against LibXML version 2.6.16, but has dynamically loaded 2.6.32@?
+
+Here's how to fix it.
+
+<div class="toggle">
+
+h2. Short version
+
+* install libxml2 and libxslt. I used fink:
+
+pre. sudo fink install libxml2 libxml2-bin libxml2-shlibs libxslt libxslt-bin libxslt-shlibs
+
+bq. but you could also try "installing from source":ftp://xmlsoft.org/libxml2/ or "using an installer.":http://www.explain.com.au/oss/libxml2xslt.html ("more here":http://xmlsoft.org/downloads.html  Fink is probably going to try to install that for something anyway, though, so if you use fink at all I'd use its libxml2 and libxslt (especially since having too many versions running around is what got us into this mess).
+
+* pass the libraries' locations to rubygems.
+
+bq. Here's the command I used; it forces fink's libraries to the front of the linker's search path, and specifies directly the library and include directories for extconf.rb:
+
+pre. womper ~/ics/rubygems$ sudo bash -c 'LD_LIBRARY_PATH=/sw/lib DYLD_LIBRARY_PATH=/sw/lib ; gem install --no-rdoc --no-ri -V nokogiri -- --with-xml2-lib=/sw/lib --with-xml2-include=/sw/include/libxml2 --with-xslt-lib=/sw/lib --with-xslt-include=/sw/include/libxslt'
+
+</div><div class="toggle">
+
+h2. A subtle problem to avoid
+
+Along the way I ran into a really bizarre bug, where it would look like it went well all the way up til I tried requiring 
+
+I don't know if it's the ruby extconf or something in nokogiri, but the install script is joining some library search path with ':' when it should be using ','.  This only crops up if you give it more than one thing to look for -- for example, giving `--with-xml2-dir=/sw` *and* `--with-xml2-include==/sw/include/libxml2`
+
+h3. NOT GOOD
+
+pre. $ sudo bash -c 'LD_LIBRARY_PATH=/sw/lib DYLD_LIBRARY_PATH=/sw/lib ; gem install --no-rdoc --no-ri -V nokogiri -- --with-xml2-dir=/sw/ --with-xml2-lib=/sw/lib/ --with-xml2-include=/sw/include/libxml2 --with-xslt-dir=/sw --with-xslt-include=/sw/include/libxslt --with-xslt-lib=/sw/lib'
+
+The search path is subtly wrong: it has @/sw/include/libxslt:/sw/include/libxslt:/sw/include@ and @/sw/include/libxml2:/sw/include/libxml2:/sw//include@ (those should be joined with ','):
+
+pre.. # ...
+/usr/local/bin/nokogiri
+Building native extensions.  This could take a while...
+/usr/local/bin/ruby extconf.rb --with-xml2-dir=/sw/ --with-xml2-lib=/sw/lib/ --with-xml2-include=/sw/include/libxml2 --with-xslt-dir=/sw --with-xslt-include=/sw/include/libxslt --with-xslt-lib=/sw/lib
+checking for iconv.h          in /sw/include/libxslt:/sw/include/libxslt:/sw/include,/sw/include/libxml2:/sw/include/libxml2:/sw//include,/opt/local/include,/opt/local/include,/opt/local/include/libxml2,/usr/local/include,/usr/local/include/libxml2,/usr/local/include,/usr/local/include/libxml2,/usr/include,/usr/include/libxml2... yes
+checking for libxml/parser.h  in /sw/include/libxslt:/sw/include/libxslt:/sw/include,/sw/include/libxml2:/sw/include/libxml2:/sw//include,/opt/local/include,/opt/local/include,/opt/local/include/libxml2,/usr/local/include,/usr/local/include/libxml2,/usr/local/include,/usr/local/include/libxml2,/usr/include,/usr/include/libxml2... yes
+checking for libxslt/xslt.h   in /sw/include/libxslt:/sw/include/libxslt:/sw/include,/sw/include/libxml2:/sw/include/libxml2:/sw//include,/opt/local/include,/opt/local/include,/opt/local/include/libxml2,/usr/local/include,/usr/local/include/libxml2,/usr/local/include,/usr/local/include/libxml2,/usr/include,/usr/include/libxml2... yes
+checking for libexslt/exslt.h in /sw/include/libxslt:/sw/include/libxslt:/sw/include,/sw/include/libxml2:/sw/include/libxml2:/sw//include,/opt/local/include,/opt/local/include,/opt/local/include/libxml2,/usr/local/include,/usr/local/include/libxml2,/usr/local/include,/usr/local/include/libxml2,/usr/include,/usr/include/libxml2... yes
+
+p. otool *looks* ok:
+
+pre.. womper ~/ics/rubygems$ otool -L nokogiri-*/lib/nokogiri/nokogiri.bundle                                                                                                                                                                      nokogiri-1.3.3/lib/nokogiri/nokogiri.bundle:
+/usr/local/lib/libruby.dylib (compatibility version 1.8.0, current version 1.8.7)
+/sw/lib/libexslt.0.dylib (compatibility version 9.0.0, current version 9.13.0)
+/sw/lib/libxslt.1.dylib (compatibility version 3.0.0, current version 3.24.0)
+/sw/lib/libxml2.2.dylib (compatibility version 9.0.0, current version 9.32.0)
+/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 111.1.4)
+/usr/lib/libobjc.A.dylib (compatibility version 1.0.0, current version 227.0.0)
+/usr/local/lib/libreadline.5.2.dylib (compatibility version 5.0.0, current version 5.2.0)
+/usr/lib/libgcc_s.1.dylib (compatibility version 1.0.0, current version 1.0.0)
+
+p. it isn't, though:
+
+pre.. womper ~/ics/rubygems$ nokogiri -v
+WARNING: Nokogiri was built against LibXML version 2.6.16, but has dynamically loaded 2.6.32
+---
+warnings:
+- Nokogiri was built against LibXML version 2.6.16, but has dynamically loaded 2.6.32
+libxml:
+  loaded: 2.6.32
+  binding: extension
+  compiled: 2.6.16
+nokogiri: 1.3.3
+
+h3. GOOD
+
+Take out the extra @--with-foo-dir@ and just give the @--with-foo-lib@ and @with-foo-include@:
+
+pre. womper ~/ics/rubygems$ sudo bash -c 'LD_LIBRARY_PATH=/sw/lib DYLD_LIBRARY_PATH=/sw/lib ; gem install --no-rdoc --no-ri -V nokogiri -- --with-xml2-lib=/sw/lib --with-xml2-include=/sw/include/libxml2 --with-xslt-lib=/sw/lib --with-xslt-include=/sw/include/libxslt'
+
+The search path is decent now:
+
+pre.. # ...
+Building native extensions.  This could take a while...
+/usr/local/bin/ruby extconf.rb --with-xml2-lib=/sw/lib --with-xml2-include=/sw/include/libxml2 --with-xslt-lib=/sw/lib --with-xslt-include=/sw/include/libxslt
+checking for iconv.h          in /sw/include/libxslt,/sw/include/libxml2,/opt/local/include,/opt/local/include,/opt/local/include/libxml2,/usr/local/include,/usr/local/include/libxml2,/usr/local/include,/usr/local/include/libxml2,/usr/include,/usr/include/libxml2... yes
+checking for libxml/parser.h  in /sw/include/libxslt,/sw/include/libxml2,/opt/local/include,/opt/local/include,/opt/local/include/libxml2,/usr/local/include,/usr/local/include/libxml2,/usr/local/include,/usr/local/include/libxml2,/usr/include,/usr/include/libxml2... yes
+checking for libxslt/xslt.h   in /sw/include/libxslt,/sw/include/libxml2,/opt/local/include,/opt/local/include,/opt/local/include/libxml2,/usr/local/include,/usr/local/include/libxml2,/usr/local/include,/usr/local/include/libxml2,/usr/include,/usr/include/libxml2... yes
+checking for libexslt/exslt.h in /sw/include/libxslt,/sw/include/libxml2,/opt/local/include,/opt/local/include,/opt/local/include/libxml2,/usr/local/include,/usr/local/include/libxml2,/usr/local/include,/usr/local/include/libxml2,/usr/include,/usr/include/libxml2... yes
+# ...
+Successfully installed nokogiri-1.3.3
+
+p. otool looks OK, and is:
+
+pre.. womper ~/ics/rubygems$ otool -L nokogiri-*/lib/nokogiri/nokogiri.bundle                                                                                                                                                                      nokogiri-1.3.3/lib/nokogiri/nokogiri.bundle:
+        /usr/local/lib/libruby.dylib (compatibility version 1.8.0, current version 1.8.7)
+        /sw/lib/libexslt.0.dylib (compatibility version 9.0.0, current version 9.13.0)
+        /sw/lib/libxslt.1.dylib (compatibility version 3.0.0, current version 3.24.0)
+        /sw/lib/libxml2.2.dylib (compatibility version 9.0.0, current version 9.32.0)
+        /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 111.1.4)
+        /usr/lib/libobjc.A.dylib (compatibility version 1.0.0, current version 227.0.0)
+        /usr/local/lib/libreadline.5.2.dylib (compatibility version 5.0.0, current version 5.2.0)
+        /usr/lib/libgcc_s.1.dylib (compatibility version 1.0.0, current version 1.0.0)
+
+p. Now runs with no warnings
+
+pre.. womper ~/ics/rubygems$ nokogiri -v                                                                                                                                                                                                           ---
+warnings: []
+libxml:
+  loaded: 2.6.32
+  binding: extension
+  compiled: 2.6.32
+nokogiri: 1.3.3
+
+</div>
