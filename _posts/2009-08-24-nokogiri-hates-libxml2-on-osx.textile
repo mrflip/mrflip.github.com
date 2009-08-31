@@ -7,7 +7,7 @@ Are you getting a "pissy message":http://github.com/tenderlove/nokogiri/issues/c
 
 Here's how to fix it.
 
-<div class="toggle"><h2>Short version</h2><p>
+<div class="toggle"><h2>Short version</h2>
 
 * install libxml2 and libxslt. I used fink:
 
@@ -21,7 +21,7 @@ bq. Here's the command I used; it forces fink's libraries to the front of the li
 
 pre. womper ~/ics/rubygems$ sudo bash -c 'LD_LIBRARY_PATH=/sw/lib DYLD_LIBRARY_PATH=/sw/lib ; gem install --no-rdoc --no-ri -V nokogiri -- --with-xml2-lib=/sw/lib --with-xml2-include=/sw/include/libxml2 --with-xslt-lib=/sw/lib --with-xslt-include=/sw/include/libxslt'
 
-</div><div class="toggle"><h2>A subtle problem to avoid</h2><p>
+</p></div><div class="toggle"><h2>A subtle problem to avoid</h2><p>
 
 Along the way I ran into a really bizarre bug, where it would look like it went well all the way up til I tried requiring 
 
