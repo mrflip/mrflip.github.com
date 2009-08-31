@@ -25,11 +25,11 @@ pre. womper ~/ics/rubygems$ sudo bash -c 'LD_LIBRARY_PATH=/sw/lib DYLD_LIBRARY_P
 
 Along the way I ran into a really bizarre bug, where it would look like it went well all the way up til I tried requiring 
 
-I don't know if it's the ruby extconf or something in nokogiri, but the install script is joining some library search path with ':' when it should be using ','.  This only crops up if you give it more than one thing to look for - for example, giving @--with-xml2-dir=/sw@ *and* @--with-xml2-include==/sw/include/libxml2@
+I don't know if it's the ruby extconf or something in nokogiri, but the install script is joining some library search path with ':' when it should be using ','.  This only crops up if you give it more than one thing to look for: for example, giving @--with-xml2-dir=/sw@ *and* @--with-xml2-include==/sw/include/libxml2@
 
 h3. NOT GOOD
 
-pre. $ sudo bash -c 'LD_LIBRARY_PATH=/sw/lib DYLD_LIBRARY_PATH=/sw/lib ; gem install --no-rdoc --no-ri -V nokogiri -- --with-xml2-dir=/sw/ --with-xml2-lib=/sw/lib/ --with-xml2-include=/sw/include/libxml2 --with-xslt-dir=/sw --with-xslt-include=/sw/include/libxslt --with-xslt-lib=/sw/lib'
+77<notextile>3<notextile><pre>$ sudo bash -c 'LD_LIBRARY_PATH=/sw/lib DYLD_LIBRARY_PATH=/sw/lib ; gem install --no-rdoc --no-ri -V nokogiri -- --with-xml2-dir=/sw/ --with-xml2-lib=/sw/lib/ --with-xml2-include=/sw/include/libxml2 --with-xslt-dir=/sw --with-xslt-include=/sw/include/libxslt --with-xslt-lib=/sw/lib'</pre></notextile>3</notextile>2
 
 The search path is subtly wrong: it has @/sw/include/libxslt:/sw/include/libxslt:/sw/include@ and @/sw/include/libxml2:/sw/include/libxml2:/sw//include@ (those should be joined with ','):
 
