@@ -6,15 +6,19 @@ collapse: false
 
 h1(gemheader). mrflip %(small):: data farmer%
 
+p(description)tools to organize, explore and comprehend massive information streams
 
-p(description). Here are some of my open source projects:
+p. This is the home for my open-source projects. I founded the <a href="http://infochimps.org">infochimps.org</a> project -- a website to find, share or sell any dataset in the world.  Get data got data Go infochimps.
+
+p. Together with <a href="http://github.com/dhruvbansal">Dhruv Bansal</a> and other infochimps, we're developing the Infinite Monkeywrench: a toolkit for rapid development of effective data-munging scripts.
+
+h3. Some components of the Infinite Monkeywrench:
 
 * "edamame,":edamame/ a fast persistent job queue
-* "wukong,":wukong/   Hadoopo made so easy a chimpanzee can use it.
+* "wukong,":wukong/   Hadoop made so easy a chimpanzee can use it.
 * "monkeyshines,":monkeyshines/ a fast, flexible distributed guided scraper
-* "wuclan,":wuclan/ monkeyshines recipes for social media sites
-
-
-p. I also founded the <a href="http://infochimps.org">infochimps.org</a> project -- a website to find, share or sell any dataset in the world.  If you need to get or got data, stop on by.
+* "wuclan,":wuclan/ monkeyshines recipes for social media sites.
+* "IMW (Infinite Monkeywrench),":http://github.com/infochimps/imw testbed for monkeywrench components
+* "infochimps-data,"http://github.com/mrflip/infochimps-data our own collection of data mungers to feed infochimps.org
 
 {% include news.html %}
