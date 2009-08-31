@@ -21,7 +21,7 @@ bq. Here's the command I used; it forces fink's libraries to the front of the li
 
 pre. womper ~/ics/rubygems$ sudo bash -c 'LD_LIBRARY_PATH=/sw/lib DYLD_LIBRARY_PATH=/sw/lib ; gem install --no-rdoc --no-ri -V nokogiri -- --with-xml2-lib=/sw/lib --with-xml2-include=/sw/include/libxml2 --with-xslt-lib=/sw/lib --with-xslt-include=/sw/include/libxslt'
 
-</div><div class="toggle"><h2>A subtle problem to avoid</h2>
+</div><div class="toggle"><h2>A subtle problem to avoid</h2><p>
 
 Along the way I ran into a really bizarre bug, where it would look like it went well all the way up til I tried requiring 
 
@@ -99,12 +99,11 @@ pre.. womper ~/ics/rubygems$ otool -L nokogiri-*/lib/nokogiri/nokogiri.bundle   
 
 p. Now runs with no warnings
 
-pre.. womper ~/ics/rubygems$ nokogiri -v                                                                                                                                                                                                           ---
+<pre>womper ~/ics/rubygems$ nokogiri -v                                                                                                                                                                                                           ---
 warnings: []
 libxml:
   loaded: 2.6.32
   binding: extension
   compiled: 2.6.32
 nokogiri: 1.3.3
-
-</div>
+</pre></div>
