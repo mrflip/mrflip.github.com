@@ -18,17 +18,17 @@
    <link rel="stylesheet" type="text/css" href="/css/print.css"  media="print" />
    <link rel="stylesheet" type="text/css" href="/css/main.css"   media="screen, projection" />
    <link rel="stylesheet" type="text/css" href="/css/syntax.css" />
-   <link rel="stylesheet" type="text/css" href="gem.css"   media="screen, projection" />
+   <link rel="stylesheet" type="text/css" href="/gem.css"   media="screen, projection" />
 </head>
 <body>
 
 <div id="container">
   <div id="header">
     <a href="/">{{ site.gemuser }}</a> /
-    {% if site.gemname %}<a href="index.html">{{ site.gemname }}</a> &middot; {% endif %}
+    {% if site.gemname %}<a href="/index.html">{{ site.gemname }}</a> &middot; {% endif %}
     <a class="extra" href="http://github.com/{{ site.gemuser }}/{{ site.gemname }}">source code</a>
     {% for segment in site.header_files %}
-    &middot; <a class="extra" href="{{ segment }}{{ site.header_ref }}">{{ segment | downcase }}</a> 
+    &middot; <a class="extra" href="/{{ segment }}{{ site.header_ref }}">{{ segment | downcase }}</a> 
     {% endfor %}
   </div> 
 
@@ -57,7 +57,7 @@
     <div class="rss">
       <!-- http://feeds.feedburner.com/{{ site.gemuser }}-github-com-{{ site.gemname }} -->
       <!-- <a href="http://feeds.feedburner.com/{{ site.gemuser }}-github-com/{{ site.gemname }}" title="{{ site.gemuser }}/{{ site.gemname }} news" /> -->
-      <p><a href="atom.xml"><img src="/images/rss.png" alt="Subscribe to RSS Feed" /></a></p>
+      <p><a href="/atom.xml"><img src="/images/rss.png" alt="Subscribe to RSS Feed" /></a></p>
     </div>
     <br class="clear"/>
     <div class="credits">
