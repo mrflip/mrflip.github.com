@@ -6,19 +6,21 @@ collapse: false
 
 h1(gemheader). mrflip %(small):: data farmer%
 
-p(description)tools to organize, explore and comprehend massive information streams
+p(description). tools to organize, explore and comprehend massive information streams
 
-p. This is the home for my open-source projects. I founded the <a href="http://infochimps.org">infochimps.org</a> project -- a website to find, share or sell any dataset in the world.  Get data got data Go infochimps.
+p. This is the home for my open-source projects. I founded the "infochimps.org":http://infochimps.org project -- a **website to find, share or sell any dataset in the world**.  Get data? Got data? Go infochimps.
 
-p. Together with <a href="http://github.com/dhruvbansal">Dhruv Bansal</a> and other infochimps, we're developing the Infinite Monkeywrench: a toolkit for rapid development of effective data-munging scripts.
+p. Together with <a href="http://github.com/dhruvbansal">Dhruv Bansal</a> and other infochimps, we're developing the **Infinite Monkeywrench**: a toolkit for rapid development of effective data-munging scripts.
+
+p. You can also find me on "twitter,":http://twitter.com/mrflip at "mrflip.com,":http://mrflip.com/ and ... well, I bet you can spot the pattern.
 
 h3. Some components of the Infinite Monkeywrench:
 
-* "edamame,":edamame/ a fast persistent job queue
-* "wukong,":wukong/   Hadoop made so easy a chimpanzee can use it.
-* "monkeyshines,":monkeyshines/ a fast, flexible distributed guided scraper
-* "wuclan,":wuclan/ monkeyshines recipes for social media sites.
+* "edamame,":edamame/ a **fast persistent job queue**
+* "wukong,":wukong/   **Hadoop made so easy** a chimpanzee can use it.
+* "monkeyshines,":monkeyshines/ a fast, flexible **distributed guided scraper**
+* "wuclan,":wuclan/ **massive-scale exploration of social networks**.
 * "IMW (Infinite Monkeywrench),":http://github.com/infochimps/imw testbed for monkeywrench components
-* "infochimps-data,"http://github.com/mrflip/infochimps-data our own collection of data mungers to feed infochimps.org
+* "infochimps-data,"http://github.com/mrflip/infochimps-data our own collection of **data mungers** to feed infochimps.org
 
 {% include news.html %}

@@ -165,7 +165,7 @@ ul.posts {
 ul.posts li {
   line-height: 1.75em;
 }
-ul.posts span {
+ul.posts span.postdate {
   color: #aaa;
   font-family: Monaco, "Courier New", monospace;
   font-size: 80%;
