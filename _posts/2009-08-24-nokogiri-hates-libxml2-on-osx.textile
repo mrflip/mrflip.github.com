@@ -7,7 +7,7 @@ Are you getting a "pissy message":http://github.com/tenderlove/nokogiri/issues/c
 
 Here's how to fix it.
 
-<div class="toggle"><h2>Short version</h2>
+<div class="toggle"><h2>Short version</h2><p>
 
 * install libxml2 and libxslt. I used fink:
 
