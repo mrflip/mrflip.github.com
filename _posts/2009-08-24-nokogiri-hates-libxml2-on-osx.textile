@@ -25,7 +25,7 @@ pre. womper ~/ics/rubygems$ sudo bash -c 'LD_LIBRARY_PATH=/sw/lib DYLD_LIBRARY_P
 
 Along the way I ran into a really bizarre bug, where it would look like it went well all the way up til I tried requiring 
 
-I don't know if it's the ruby extconf or something in nokogiri, but the install script is joining some library search path with ':' when it should be using ','.  This only crops up if you give it more than one thing to look for -- for example, giving `--with-xml2-dir=/sw` *and* `--with-xml2-include==/sw/include/libxml2`
+I don't know if it's the ruby extconf or something in nokogiri, but the install script is joining some library search path with ':' when it should be using ','.  This only crops up if you give it more than one thing to look for - for example, giving @--with-xml2-dir=/sw@ *and* @--with-xml2-include==/sw/include/libxml2@
 
 h3. NOT GOOD
 
