@@ -1,0 +1,20 @@
+---
+title: Testing 1.2.3
+layout: default
+pygments:       true
+---
+
+{% highlight ruby %}
+class RequestParser < Wukong::Streamer::StructStreamer
+  #
+  # ask each request to parse itself;
+  # serialize the results.
+  #
+  def process request, *args, &block
+    request.parse(*args) do |obj|
+      next if obj.is_a? BadRecord
+      yield obj.to_flat(false)
+    end
+  end
+end
+{% endhighlight %}
