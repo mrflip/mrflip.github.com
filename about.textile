@@ -1,10 +1,7 @@
 ---
-# -*- textile -*-
 title: Installing Nokogiri on OSX with an libxml2 it doesn't hate
 layout: default
 ---
-
-77<notextile><notextile>hi</notextile></notextile>
 
 I started infochimps.org. I'm building tools to organize, explore and comprehend massive information streams.
 
